@@ -3,14 +3,15 @@ import SwiftUI
 /// A SwiftUI wrapper around `UIActivityViewController` for presenting a share sheet.
 public struct S2EShareSheet: UIViewControllerRepresentable {
     public let items: [Any]
+    public let fallbackItem: Any?
 
-    public init(items: [Any]) {
+    public init(items: [Any], fallbackItem: Any? = nil) {
         self.items = items
+        self.fallbackItem = fallbackItem
     }
 
     public func makeUIViewController(context: Context) -> UIActivityViewController {
-        assert(!items.isEmpty, "S2EShareSheet requires at least one item to share.")
-        let activityItems = items.isEmpty ? ["Check out Math Slash Heroes!"] : items
+        let activityItems = !items.isEmpty ? items : fallbackItem.map { [$0] } ?? [""]
         return UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
 
